@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 namespace MatrixTransformations
@@ -24,6 +25,17 @@ namespace MatrixTransformations
         // Variables
         private float degrees = 20F;
         private float scale = 1.5F;
+        private float xTranslation = 0F;
+        private float yTranslation = 0F;
+        private float zTranslation = 0F;
+        private float xRotation = 0f;
+        private float yRotation = 0f;
+        private float zRotation = 0f;
+        private float r = 0F;
+        private float d = 0F;
+        private float phi = 0F;
+        private float theta = 0F;
+
         private Vector translation = new Vector(75, -25);
 
         public Form1()
@@ -88,6 +100,34 @@ namespace MatrixTransformations
             // Draw Translated square
             square3.Draw(e.Graphics, ViewportTransformation(TranslationTransformation(square3.vb, translation)));
 
+            ShowInfo(e.Graphics);
+        }
+
+        private void ShowInfo(Graphics g)
+        {
+            // Create font and brush.
+            Font drawFont = new Font("Arial", 10);
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
+
+            // StringBuilder.
+            StringBuilder sb = new StringBuilder();
+
+            // Add lines.
+            sb.AppendLine($"TranslateX: \t {xTranslation} \t Left / Right");
+            sb.AppendLine($"TranslateY: \t {yTranslation} \t Up / Down");
+            sb.AppendLine($"TranslateZ: \t {zTranslation} \t PgDn / PgUp");
+            sb.AppendLine($"RotateX: \t {xRotation} \t x / X");
+            sb.AppendLine($"RotateY: \t {yRotation} \t y / Y");
+            sb.AppendLine($"RotateZ: \t {zRotation} \t z / Z");
+            sb.AppendLine($"Scale: \t\t {scale} \t s / S");
+            sb.AppendLine();
+            sb.AppendLine($"r: \t {r} \t r / R");
+            sb.AppendLine($"d: \t {d} \t d / D");
+            sb.AppendLine($"Phi: \t {phi} \t p / P");
+            sb.AppendLine($"Theta: \t {theta} \t t / T");
+
+            // Draw String.
+            g.DrawString(sb.ToString(), drawFont, drawBrush, 1,1);
         }
 
         public static List<Vector> ViewportTransformation(List<Vector> vb) 
@@ -138,34 +178,52 @@ namespace MatrixTransformations
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-                Application.Exit();
-
             switch (e.KeyCode)
             {
+                case Keys.Escape:
+                    Application.Exit();
+                    break;
+                case Keys.PageUp:
+                    zTranslation += 1;
+                    break;
+                case Keys.PageDown:
+                    zTranslation -= 1;
+                    break;
+                case Keys.Left:
+                    xTranslation += 1;
+                    break;
+                case Keys.Up:
+                    yTranslation += 1;
+                    break;
+                case Keys.Right:
+                    xTranslation -= 1;
+                    break;
+                case Keys.Down:
+                    yTranslation -= 1;
+                    break;
+                case Keys.D:
+                    d = (e.Modifiers == Keys.Shift) ? d + 1F : d - 1F;
+                    break;
+                case Keys.P:
+                    phi = (e.Modifiers == Keys.Shift) ? phi + 1F : phi - 1F;
+                    break;
+                case Keys.R:
+                    r = (e.Modifiers == Keys.Shift) ? r + 1F : r - 1F;
+                    break;
                 case Keys.S:
                     scale = (e.Modifiers == Keys.Shift) ? scale + 0.1F : scale - 0.1F;
                     break;
-                case Keys.D:
-                    degrees = (e.Modifiers == Keys.Shift) ? degrees + 1F : degrees - 1F;
+                case Keys.T:
+                    theta = (e.Modifiers == Keys.Shift) ? theta + 1F : theta - 1F;
                     break;
-                case Keys.NumPad8:
-                    translation.y += 1;
+                case Keys.X:
+                    xRotation = (e.Modifiers == Keys.Shift) ? xRotation + 1F : xRotation - 1F;
                     break;
-                case Keys.NumPad2:
-                    translation.y -= 1;
+                case Keys.Y:
+                    yRotation = (e.Modifiers == Keys.Shift) ? yRotation + 1F : yRotation - 1F;
                     break;
-                case Keys.NumPad6:
-                    translation.x += 1;
-                    break;
-                case Keys.NumPad4:
-                    translation.x -= 1;
-                    break;
-                case Keys.Add:
-                    degrees += 1F;
-                    break;
-                case Keys.Subtract:
-                    degrees -= 1F;
+                case Keys.Z:
+                    zRotation = (e.Modifiers == Keys.Shift) ? zRotation + 1F : zRotation - 1F;
                     break;
             }
 
