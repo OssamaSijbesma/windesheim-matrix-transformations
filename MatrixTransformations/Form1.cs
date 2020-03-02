@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Timers;
+
 
 namespace MatrixTransformations
 {
@@ -32,6 +34,14 @@ namespace MatrixTransformations
         private float d = 800F;
         private float phi = -10F; // angle z-axis
         private float theta = -100F; // angle y-axis
+        
+        // Animation
+        System.Timers.Timer timer;
+        private bool animation = false;
+        private bool animationToggel = true;
+        private int phase = 0;
+
+        private int subphase = 0;
 
         public Form1()
         {
@@ -70,6 +80,46 @@ namespace MatrixTransformations
             // Create object
             cube = new Cube(Color.Purple);
 
+            // Initialize the timer
+            timer = new System.Timers.Timer(50);
+            timer.AutoReset = true;
+            timer.Elapsed += cubeAnimation;
+            timer.Start();
+        }
+
+        private void cubeAnimation(object sender, ElapsedEventArgs e)
+        {
+            if (animation)
+            {
+                switch (phase)
+                {
+                    case 1:
+                        if (scale < 1F) phase = 2;
+                        if (scale > 1.5F || scale < 1F) animationToggel = !animationToggel;
+
+                        scale = animationToggel ? scale + 0.01F : scale - 0.01F;
+                        theta -= 0.01F;
+                        break;
+                    case 2:
+                        if (xRotation < 0F) phase = 3;
+                        if (xRotation > 45F || xRotation < 0F) animationToggel = !animationToggel;
+
+                        xRotation = animationToggel ? xRotation + 1F : xRotation - 1F;
+                        theta -= 0.01F;
+                        break;
+                    case 3:
+                        if (yRotation < 0F) phase = 1;
+                        if (yRotation > 45F || yRotation < 0F) animationToggel = !animationToggel;
+
+                        yRotation = animationToggel ? yRotation + 1F : yRotation - 1F;
+                        phi += 0.01F;
+                        break;
+                    default:
+                        phase = 1;
+                        break;
+                }
+                Invalidate();
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -114,6 +164,8 @@ namespace MatrixTransformations
             sb.AppendLine($"d: \t {d} \t d / D");
             sb.AppendLine($"Phi: \t {phi} \t p / P");
             sb.AppendLine($"Theta: \t {theta} \t t / T");
+            sb.AppendLine();
+            sb.AppendLine($"Phase: \t {phase}");
 
             // Draw String.
             g.DrawString(sb.ToString(), drawFont, drawBrush, 1,1);
@@ -201,6 +253,10 @@ namespace MatrixTransformations
                 case Keys.Down:
                     yTranslation -= 0.1F;
                     break;
+                case Keys.A:
+                    animation = (e.Modifiers == Keys.Shift) ? true : false;       
+                    break;
+
                 case Keys.C:
                     scale = 1F;
                     xTranslation = 0F;
@@ -213,6 +269,8 @@ namespace MatrixTransformations
                     r = 10F;
                     theta = -100F;
                     phi = -10;
+                    animation = false;
+                    phase = 0;
                     break;
                 case Keys.D:
                     d = (e.Modifiers == Keys.Shift) ? d + 1F : d - 1F;
