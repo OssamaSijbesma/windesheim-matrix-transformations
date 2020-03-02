@@ -108,14 +108,16 @@ namespace MatrixTransformations
                         theta -= 0.01F;
                         break;
                     case 3:
-                        if (yRotation < 0F) phase = 1;
+                        if (yRotation < 0F) phase = 0;
                         if (yRotation > 45F || yRotation < 0F) animationToggel = !animationToggel;
 
                         yRotation = animationToggel ? yRotation + 1F : yRotation - 1F;
                         phi += 0.01F;
                         break;
                     default:
-                        phase = 1;
+                        if (phi == -10F && theta == -100F) phase = 1;
+                        if (theta != -100F) theta += 0.01F;
+                        if (phi != -10F) phi -= 0.01F;
                         break;
                 }
                 Invalidate();
