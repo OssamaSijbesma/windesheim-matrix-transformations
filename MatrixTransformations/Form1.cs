@@ -202,6 +202,13 @@ namespace MatrixTransformations
                     yTranslation -= 0.1F;
                     break;
                 case Keys.C:
+                    scale = 1F;
+                    xTranslation = 0F;
+                    yTranslation = 0F;
+                    zTranslation = 0F;
+                    xRotation = 0F;
+                    yRotation = 0F;
+                    zRotation = 0F;
                     d = 800F;
                     r = 10F;
                     theta = -100F;
