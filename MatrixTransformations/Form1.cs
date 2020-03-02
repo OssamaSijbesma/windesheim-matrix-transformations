@@ -13,10 +13,6 @@ namespace MatrixTransformations
         AxisY y_axis;
 
         // Objects
-        //Square square;
-        //Square square1;
-        //Square square2;
-        //Square square3;
         Cube cube;
 
         // Window dimensions
@@ -24,20 +20,18 @@ namespace MatrixTransformations
         const int HEIGHT = 600;
 
         // Variables
-        private float scale = 1.5F;
+        private float scale = 1F;
         private float xTranslation = 0F;
         private float yTranslation = 0F;
         private float zTranslation = 0F;
-        private float xRotation = 0f;
-        private float yRotation = 0f;
-        private float zRotation = 0f;
+        private float xRotation = 0F;
+        private float yRotation = 0F;
+        private float zRotation = 0F;
 
-        private float r = 10F;
+        private float r = 10F; // length of the vector
         private float d = 800F;
-        private float phi = -10F;
-        private float theta = -100F;
-
-        private Vector translation = new Vector(75, -25);
+        private float phi = -10F; // angle z-axis
+        private float theta = -100F; // angle y-axis
 
         public Form1()
         {
@@ -74,10 +68,6 @@ namespace MatrixTransformations
             y_axis = new AxisY(200);
 
             // Create object
-            //square = new Square(Color.Purple,100);
-            //square1 = new Square(Color.Cyan, 100);
-            //square2 = new Square(Color.Gold, 100);
-            //square3 = new Square(Color.DarkBlue, 100);
             cube = new Cube(Color.Purple);
 
         }
@@ -90,14 +80,14 @@ namespace MatrixTransformations
             x_axis.Draw(e.Graphics, ViewportTransformation(x_axis.vb));
             y_axis.Draw(e.Graphics, ViewportTransformation(y_axis.vb));
 
-            // Draw squares
-            //square.Draw(e.Graphics, ViewportTransformation(square.vb));
-            //square1.Draw(e.Graphics, ViewportTransformation(ScaleTransformation(square1.vb, scale)));
-            //square2.Draw(e.Graphics, ViewportTransformation(RotationTransformation(square2.vb, degrees)));
-            //square3.Draw(e.Graphics, ViewportTransformation(TranslationTransformation(square3.vb, translation)));
-
             // Draw cube
-            cube.Draw(e.Graphics, ViewportTransformation(cube.vertexbuffer));
+            cube.Draw(e.Graphics, 
+                ViewportTransformation(
+                ProjectionTransformation(d,
+                ViewTransformation(r, phi, theta,
+                TranslationTransformation(xTranslation, yTranslation, zTranslation,
+                RotationTransformation(xRotation, yRotation, zRotation,
+                ScaleTransformation(scale, cube.vertexbuffer)))))));
 
             ShowInfo(e.Graphics);
         }
@@ -131,49 +121,60 @@ namespace MatrixTransformations
 
         public static List<Vector> ViewportTransformation(List<Vector> vb) 
         {
-            List<Vector> result = new List<Vector>();
-
             float delta_x = WIDTH / 2;
             float delta_y = HEIGHT / 2;
 
-            foreach (Vector v in vb) 
-                result.Add(new Vector(v.x + delta_x, delta_y - v.y));
-
+            List<Vector> result = new List<Vector>();
+            vb.ForEach(v => result.Add(new Vector(v.x + delta_x, delta_y - v.y)));
             return result;
         }
 
-        public static List<Vector> ScaleTransformation(List<Vector> vb, float scale)
+        public static List<Vector> ScaleTransformation(float scale, List<Vector> vb)
         {
-            List<Vector> result = new List<Vector>();
             Matrix scaleMatrix = Matrix.ScaleMatrix(scale);
 
-            foreach (Vector v in vb)
-                result.Add(scaleMatrix * v);
-
+            List<Vector> result = new List<Vector>();
+            vb.ForEach(v => result.Add(scaleMatrix * v));
             return result;
         }
 
-        public static List<Vector> RotationTransformation(List<Vector> vb, float degrees)
+        public static List<Vector> RotationTransformation(float xRotation, float yRotation, float zRotation, List<Vector> vb)
+        {
+            Matrix xRotateMatrix = Matrix.RotateMatrixX(xRotation);
+            Matrix yRotateMatrix = Matrix.RotateMatrixY(yRotation);
+            Matrix zRotateMatrix = Matrix.RotateMatrixZ(zRotation);
+
+            List<Vector> result = new List<Vector>();
+            vb.ForEach(v => result.Add(xRotateMatrix * yRotateMatrix * zRotateMatrix * v));
+            return result;
+        }
+
+        public static List<Vector> TranslationTransformation(float xTranslation, float yTranslation, float zTranslation, List<Vector> vb)
+        {
+            Matrix translateMatrix = Matrix.TranslateMatrix(new Vector(xTranslation, yTranslation, zTranslation));
+
+            List<Vector> result = new List<Vector>();
+            vb.ForEach(v => result.Add(translateMatrix * v));
+            return result;
+        }
+
+
+        public static List<Vector> ViewTransformation(float r, float phi, float theta, List<Vector> vb)
+        {
+            Matrix translateMatrix = Matrix.InverseMatrix(r, phi, theta);
+
+            List<Vector> result = new List<Vector>();
+            vb.ForEach(v => result.Add(translateMatrix * v));                
+            return result;
+        }
+
+        public static List<Vector> ProjectionTransformation(float d, List<Vector> vb)
         {
             List<Vector> result = new List<Vector>();
-            Matrix rotateMatrix = Matrix.RotateMatrixZ(degrees);
-
-            foreach (Vector v in vb)
-                result.Add(rotateMatrix * v);
-
+            vb.ForEach(v => result.Add(Matrix.ProjectionMatrix(d, v.z) * v));
             return result;
         }
 
-        public static List<Vector> TranslationTransformation(List<Vector> vb, Vector translation)
-        {
-            List<Vector> result = new List<Vector>();
-            Matrix translateMatrix = Matrix.TranslateMatrix(translation);
-
-            foreach (Vector v in vb)
-                result.Add(translateMatrix * v);
-
-            return result;
-        }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -183,22 +184,22 @@ namespace MatrixTransformations
                     Application.Exit();
                     break;
                 case Keys.PageUp:
-                    zTranslation += 1;
+                    zTranslation += 0.1F;
                     break;
                 case Keys.PageDown:
-                    zTranslation -= 1;
+                    zTranslation -= 0.1F;
                     break;
                 case Keys.Left:
-                    xTranslation += 1;
+                    xTranslation += 0.1F;
                     break;
                 case Keys.Up:
-                    yTranslation += 1;
+                    yTranslation += 0.1F;
                     break;
                 case Keys.Right:
-                    xTranslation -= 1;
+                    xTranslation -= 0.1F;
                     break;
                 case Keys.Down:
-                    yTranslation -= 1;
+                    yTranslation -= 0.1F;
                     break;
                 case Keys.C:
                     d = 800F;
@@ -210,7 +211,7 @@ namespace MatrixTransformations
                     d = (e.Modifiers == Keys.Shift) ? d + 1F : d - 1F;
                     break;
                 case Keys.P:
-                    phi = (e.Modifiers == Keys.Shift) ? phi + 1F : phi - 1F;
+                    phi = (e.Modifiers == Keys.Shift) ? phi + 0.1F : phi - 0.1F;
                     break;
                 case Keys.R:
                     r = (e.Modifiers == Keys.Shift) ? r + 1F : r - 1F;
@@ -219,7 +220,7 @@ namespace MatrixTransformations
                     scale = (e.Modifiers == Keys.Shift) ? scale + 0.1F : scale - 0.1F;
                     break;
                 case Keys.T:
-                    theta = (e.Modifiers == Keys.Shift) ? theta + 1F : theta - 1F;
+                    theta = (e.Modifiers == Keys.Shift) ? theta + 0.1F : theta - 0.1F;
                     break;
                 case Keys.X:
                     xRotation = (e.Modifiers == Keys.Shift) ? xRotation + 1F : xRotation - 1F;

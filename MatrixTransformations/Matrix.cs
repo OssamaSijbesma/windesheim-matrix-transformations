@@ -159,6 +159,37 @@ namespace MatrixTransformations
             return matrix;
         }
 
+        // Camera matrixes
+
+        public static Matrix InverseMatrix(float r, float phi, float theta)
+        {
+            Matrix matrix = new Matrix();
+            matrix.mat[0, 0] = (float)-Math.Sin(theta);
+            matrix.mat[0, 1] = (float)Math.Cos(theta);
+
+            matrix.mat[1, 0] = (float)(-Math.Cos(theta) * Math.Cos(phi));
+            matrix.mat[1, 1] = (float)(-Math.Cos(phi) * Math.Sin(theta));
+            matrix.mat[1, 2] = (float)Math.Sin(phi);
+
+            matrix.mat[2, 0] = (float)(Math.Cos(theta) * Math.Sin(phi));
+            matrix.mat[2, 1] = (float)(Math.Sin(theta) * Math.Sin(phi));
+            matrix.mat[2, 2] = (float)Math.Cos(phi);
+            matrix.mat[2, 3] = -r;
+
+            return matrix;
+        }
+
+        public static Matrix ProjectionMatrix(float d, float z) 
+        {
+            Matrix matrix = new Matrix();
+            matrix.mat[0, 0] = -(d / z);
+            matrix.mat[1, 1] = -(d / z);
+            matrix.mat[2, 2] = 0;
+            matrix.mat[3, 3] = 0;
+            return matrix;
+        }
+
+
         public override string ToString()
         {
             for (int i = 0; i < 3; i++)
