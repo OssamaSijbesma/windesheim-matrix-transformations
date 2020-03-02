@@ -13,17 +13,17 @@ namespace MatrixTransformations
         AxisY y_axis;
 
         // Objects
-        Square square;
-        Square square1;
-        Square square2;
-        Square square3;
+        //Square square;
+        //Square square1;
+        //Square square2;
+        //Square square3;
+        Cube cube;
 
         // Window dimensions
         const int WIDTH = 800;
         const int HEIGHT = 600;
 
         // Variables
-        private float degrees = 20F;
         private float scale = 1.5F;
         private float xTranslation = 0F;
         private float yTranslation = 0F;
@@ -31,10 +31,11 @@ namespace MatrixTransformations
         private float xRotation = 0f;
         private float yRotation = 0f;
         private float zRotation = 0f;
-        private float r = 0F;
-        private float d = 0F;
-        private float phi = 0F;
-        private float theta = 0F;
+
+        private float r = 10F;
+        private float d = 800F;
+        private float phi = -10F;
+        private float theta = -100F;
 
         private Vector translation = new Vector(75, -25);
 
@@ -73,10 +74,11 @@ namespace MatrixTransformations
             y_axis = new AxisY(200);
 
             // Create object
-            square = new Square(Color.Purple,100);
-            square1 = new Square(Color.Cyan, 100);
-            square2 = new Square(Color.Gold, 100);
-            square3 = new Square(Color.DarkBlue, 100);
+            //square = new Square(Color.Purple,100);
+            //square1 = new Square(Color.Cyan, 100);
+            //square2 = new Square(Color.Gold, 100);
+            //square3 = new Square(Color.DarkBlue, 100);
+            cube = new Cube(Color.Purple);
 
         }
 
@@ -88,17 +90,14 @@ namespace MatrixTransformations
             x_axis.Draw(e.Graphics, ViewportTransformation(x_axis.vb));
             y_axis.Draw(e.Graphics, ViewportTransformation(y_axis.vb));
 
-            // Draw square
-            square.Draw(e.Graphics, ViewportTransformation(square.vb));
+            // Draw squares
+            //square.Draw(e.Graphics, ViewportTransformation(square.vb));
+            //square1.Draw(e.Graphics, ViewportTransformation(ScaleTransformation(square1.vb, scale)));
+            //square2.Draw(e.Graphics, ViewportTransformation(RotationTransformation(square2.vb, degrees)));
+            //square3.Draw(e.Graphics, ViewportTransformation(TranslationTransformation(square3.vb, translation)));
 
-            // Draw scaled square
-            square1.Draw(e.Graphics, ViewportTransformation(ScaleTransformation(square1.vb, scale)));
-
-            // Draw Rotated square
-            square2.Draw(e.Graphics, ViewportTransformation(RotationTransformation(square2.vb, degrees)));
-
-            // Draw Translated square
-            square3.Draw(e.Graphics, ViewportTransformation(TranslationTransformation(square3.vb, translation)));
+            // Draw cube
+            cube.Draw(e.Graphics, ViewportTransformation(cube.vertexbuffer));
 
             ShowInfo(e.Graphics);
         }
@@ -157,7 +156,7 @@ namespace MatrixTransformations
         public static List<Vector> RotationTransformation(List<Vector> vb, float degrees)
         {
             List<Vector> result = new List<Vector>();
-            Matrix rotateMatrix = Matrix.RotateMatrix(degrees);
+            Matrix rotateMatrix = Matrix.RotateMatrixZ(degrees);
 
             foreach (Vector v in vb)
                 result.Add(rotateMatrix * v);
@@ -200,6 +199,12 @@ namespace MatrixTransformations
                     break;
                 case Keys.Down:
                     yTranslation -= 1;
+                    break;
+                case Keys.C:
+                    d = 800F;
+                    r = 10F;
+                    theta = -100F;
+                    phi = -10;
                     break;
                 case Keys.D:
                     d = (e.Modifiers == Keys.Shift) ? d + 1F : d - 1F;

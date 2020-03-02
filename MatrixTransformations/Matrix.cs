@@ -111,7 +111,7 @@ namespace MatrixTransformations
             return matrix;
         }
 
-        public static Matrix RotateMatrix(float degrees) 
+        public static Matrix RotateMatrixZ(float degrees) 
         {
             var radians = degrees * Math.PI / 180;
             Matrix matrix = new Matrix();
@@ -120,6 +120,32 @@ namespace MatrixTransformations
             matrix.mat[0, 1] = (float) -Math.Sin(radians);
             matrix.mat[1, 0] = (float) Math.Sin(radians);
             matrix.mat[1, 1] = (float) Math.Cos(radians);
+
+            return matrix;
+        }
+
+        public static Matrix RotateMatrixX(float degrees)
+        {
+            var radians = degrees * Math.PI / 180;
+            Matrix matrix = new Matrix();
+
+            matrix.mat[1, 1] = (float)Math.Cos(radians);
+            matrix.mat[1, 2] = (float)-Math.Sin(radians);
+            matrix.mat[2, 1] = (float)Math.Sin(radians);
+            matrix.mat[2, 2] = (float)Math.Cos(radians);
+
+            return matrix;
+        }
+
+        public static Matrix RotateMatrixY(float degrees)
+        {
+            var radians = degrees * Math.PI / 180;
+            Matrix matrix = new Matrix();
+
+            matrix.mat[0, 0] = (float)Math.Cos(radians);
+            matrix.mat[0, 2] = (float)Math.Sin(radians);
+            matrix.mat[2, 0] = (float)-Math.Sin(radians);
+            matrix.mat[2, 2] = (float)Math.Cos(radians);
 
             return matrix;
         }
