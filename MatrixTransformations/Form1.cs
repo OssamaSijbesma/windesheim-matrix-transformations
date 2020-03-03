@@ -94,9 +94,18 @@ namespace MatrixTransformations
             base.OnPaint(e);
 
             // Draw axes
-            x_axis.Draw(e.Graphics, ViewportTransformation(x_axis.vb));
-            y_axis.Draw(e.Graphics, ViewportTransformation(y_axis.vb));
-            z_axis.Draw(e.Graphics, ViewportTransformation(z_axis.vb));
+            x_axis.Draw(e.Graphics,
+                ViewportTransformation(
+                ProjectionTransformation(d,
+                ViewTransformation(r, phi, theta, x_axis.vb))));
+            y_axis.Draw(e.Graphics,
+                ViewportTransformation(
+                ProjectionTransformation(d,
+                ViewTransformation(r, phi, theta, y_axis.vb))));
+            z_axis.Draw(e.Graphics, 
+                ViewportTransformation(
+                ProjectionTransformation(d,
+                ViewTransformation(r, phi, theta, z_axis.vb))));
 
             // Draw cube
             cube.Draw(e.Graphics, 

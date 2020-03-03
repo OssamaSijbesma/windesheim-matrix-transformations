@@ -15,7 +15,7 @@ namespace MatrixTransformations
 
             vb = new List<Vector>();
             vb.Add(new Vector(0, 0));
-            vb.Add(new Vector(0, size));
+            vb.Add(new Vector(0, 1.2F));
         }
 
         public void Draw(Graphics g, List<Vector> vb)
