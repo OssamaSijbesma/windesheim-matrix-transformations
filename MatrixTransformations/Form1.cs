@@ -77,7 +77,7 @@ namespace MatrixTransformations
             y_axis = new AxisY(200);
             z_axis = new AxisZ(200);
 
-            // Create object
+            // Initialize the cube
             cube = new Cube(Color.Purple);
 
             // Initialize the timer
@@ -87,42 +87,7 @@ namespace MatrixTransformations
             timer.Start();
         }
 
-        private void cubeAnimation(object sender, ElapsedEventArgs e)
-        {
-            if (animation)
-            {
-                switch (phase)
-                {
-                    case 1:
-                        if (scale < 1F) phase = 2;
-                        if (scale > 1.5F || scale < 1F) animationToggel = !animationToggel;
-
-                        scale = animationToggel ? scale + 0.01F : scale - 0.01F;
-                        theta -= 1F;
-                        break;
-                    case 2:
-                        if (xRotation < 0F) phase = 3;
-                        if (xRotation > 45F || xRotation < 0F) animationToggel = !animationToggel;
-
-                        xRotation = animationToggel ? xRotation + 1F : xRotation - 1F;
-                        theta -= 1F;
-                        break;
-                    case 3:
-                        if (yRotation < 0F) phase = 0;
-                        if (yRotation > 45F || yRotation < 0F) animationToggel = !animationToggel;
-
-                        yRotation = animationToggel ? yRotation + 1F : yRotation - 1F;
-                        phi += 1F;
-                        break;
-                    default:
-                        if (phi == -10F && theta == -100F) phase = 1;
-                        if (theta != -100F) theta += 1F;
-                        if (phi != -10F) phi -= 1F;
-                        break;
-                }
-                Invalidate();
-            }
-        }
+        
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -132,7 +97,6 @@ namespace MatrixTransformations
             x_axis.Draw(e.Graphics, ViewportTransformation(x_axis.vb));
             y_axis.Draw(e.Graphics, ViewportTransformation(y_axis.vb));
             z_axis.Draw(e.Graphics, ViewportTransformation(z_axis.vb));
-
 
             // Draw cube
             cube.Draw(e.Graphics, 
@@ -148,30 +112,30 @@ namespace MatrixTransformations
 
         private void ShowInfo(Graphics g)
         {
-            // Create font and brush.
+            // Create font and brush
             Font drawFont = new Font("Arial", 10);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
 
-            // StringBuilder.
+            // StringBuilder
             StringBuilder sb = new StringBuilder();
 
-            // Add lines.
-            sb.AppendLine($"TranslateX: \t {xTranslation} \t Left / Right");
-            sb.AppendLine($"TranslateY: \t {yTranslation} \t Up / Down");
-            sb.AppendLine($"TranslateZ: \t {zTranslation} \t PgDn / PgUp");
-            sb.AppendLine($"RotateX: \t {xRotation} \t x / X");
-            sb.AppendLine($"RotateY: \t {yRotation} \t y / Y");
-            sb.AppendLine($"RotateZ: \t {zRotation} \t z / Z");
-            sb.AppendLine($"Scale: \t\t {scale} \t s / S");
+            // Add lines
+            sb.AppendLine($"TranslateX: \t {string.Format("{0:0.##}", xTranslation)} \t Left / Right");
+            sb.AppendLine($"TranslateY: \t {string.Format("{0:0.##}", yTranslation)} \t Up / Down");
+            sb.AppendLine($"TranslateZ: \t {string.Format("{0:0.##}", zTranslation)} \t PgDn / PgUp");
+            sb.AppendLine($"RotateX: \t {string.Format("{0:0.##}", xRotation)} \t x / X");
+            sb.AppendLine($"RotateY: \t {string.Format("{0:0.##}", yRotation)} \t y / Y");
+            sb.AppendLine($"RotateZ: \t {string.Format("{0:0.##}", zRotation)} \t z / Z");
+            sb.AppendLine($"Scale: \t\t {string.Format("{0:0.##}", scale)} \t s / S");
             sb.AppendLine();
-            sb.AppendLine($"r: \t {r} \t r / R");
-            sb.AppendLine($"d: \t {d} \t d / D");
-            sb.AppendLine($"Phi: \t {phi} \t p / P");
-            sb.AppendLine($"Theta: \t {theta} \t t / T");
+            sb.AppendLine($"r: \t {string.Format("{0:0.##}", r)} \t r / R");
+            sb.AppendLine($"d: \t {string.Format("{0:0.##}", d)} \t d / D");
+            sb.AppendLine($"Phi: \t {string.Format("{0:0.##}", phi)} \t p / P");
+            sb.AppendLine($"Theta: \t {string.Format("{0:0.##}", theta)} \t t / T");
             sb.AppendLine();
             sb.AppendLine($"Phase: \t {phase}");
 
-            // Draw String.
+            // Draw String
             g.DrawString(sb.ToString(), drawFont, drawBrush, 1,1);
         }
 
@@ -231,6 +195,42 @@ namespace MatrixTransformations
             return result;
         }
 
+        private void cubeAnimation(object sender, ElapsedEventArgs e)
+        {
+            if (animation)
+            {
+                switch (phase)
+                {
+                    case 1:
+                        if (scale < 1F) phase = 2;
+                        if (scale > 1.5F || scale < 1F) animationToggel = !animationToggel;
+
+                        scale = animationToggel ? scale + 0.01F : scale - 0.01F;
+                        theta -= 1F;
+                        break;
+                    case 2:
+                        if (xRotation < 0F) phase = 3;
+                        if (xRotation > 45F || xRotation < 0F) animationToggel = !animationToggel;
+
+                        xRotation = animationToggel ? xRotation + 1F : xRotation - 1F;
+                        theta -= 1F;
+                        break;
+                    case 3:
+                        if (yRotation < 0F) phase = 0;
+                        if (yRotation > 45F || yRotation < 0F) animationToggel = !animationToggel;
+
+                        yRotation = animationToggel ? yRotation + 1F : yRotation - 1F;
+                        phi += 1F;
+                        break;
+                    default:
+                        if (phi == -10F && theta == -100F) phase = 1;
+                        if (theta != -100F) theta += 1F;
+                        if (phi != -10F) phi -= 1F;
+                        break;
+                }
+                Invalidate();
+            }
+        }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
