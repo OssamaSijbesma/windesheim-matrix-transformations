@@ -163,17 +163,20 @@ namespace MatrixTransformations
 
         public static Matrix InverseMatrix(float r, float phi, float theta)
         {
+            var radiansPhi = phi * Math.PI / 180;
+            var radiansTheta = theta * Math.PI / 180;
+
             Matrix matrix = new Matrix();
-            matrix.mat[0, 0] = (float)-Math.Sin(theta);
-            matrix.mat[0, 1] = (float)Math.Cos(theta);
+            matrix.mat[0, 0] = (float)-Math.Sin(radiansTheta);
+            matrix.mat[0, 1] = (float)Math.Cos(radiansTheta);
 
-            matrix.mat[1, 0] = (float)(-Math.Cos(theta) * Math.Cos(phi));
-            matrix.mat[1, 1] = (float)(-Math.Cos(phi) * Math.Sin(theta));
-            matrix.mat[1, 2] = (float)Math.Sin(phi);
+            matrix.mat[1, 0] = (float)(-Math.Cos(radiansTheta) * Math.Cos(radiansPhi));
+            matrix.mat[1, 1] = (float)(-Math.Cos(radiansPhi) * Math.Sin(radiansTheta));
+            matrix.mat[1, 2] = (float)Math.Sin(radiansPhi);
 
-            matrix.mat[2, 0] = (float)(Math.Cos(theta) * Math.Sin(phi));
-            matrix.mat[2, 1] = (float)(Math.Sin(theta) * Math.Sin(phi));
-            matrix.mat[2, 2] = (float)Math.Cos(phi);
+            matrix.mat[2, 0] = (float)(Math.Cos(radiansTheta) * Math.Sin(radiansPhi));
+            matrix.mat[2, 1] = (float)(Math.Sin(radiansTheta) * Math.Sin(radiansPhi));
+            matrix.mat[2, 2] = (float)Math.Cos(radiansPhi);
             matrix.mat[2, 3] = -r;
 
             return matrix;

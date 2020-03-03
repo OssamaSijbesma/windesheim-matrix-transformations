@@ -13,6 +13,7 @@ namespace MatrixTransformations
         // Axes
         AxisX x_axis;
         AxisY y_axis;
+        AxisZ z_axis;
 
         // Objects
         Cube cube;
@@ -76,6 +77,7 @@ namespace MatrixTransformations
             // Define axes
             x_axis = new AxisX(200);
             y_axis = new AxisY(200);
+            z_axis = new AxisZ(200);
 
             // Create object
             cube = new Cube(Color.Purple);
@@ -131,6 +133,8 @@ namespace MatrixTransformations
             // Draw axes
             x_axis.Draw(e.Graphics, ViewportTransformation(x_axis.vb));
             y_axis.Draw(e.Graphics, ViewportTransformation(y_axis.vb));
+            z_axis.Draw(e.Graphics, ViewportTransformation(z_axis.vb));
+
 
             // Draw cube
             cube.Draw(e.Graphics, 
