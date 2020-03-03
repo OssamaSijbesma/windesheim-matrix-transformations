@@ -5,7 +5,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.Timers;
 
-
 namespace MatrixTransformations
 {
     public partial class Form1 : Form
@@ -17,6 +16,7 @@ namespace MatrixTransformations
 
         // Objects
         Cube cube;
+        Piramid piramid;
 
         // Window dimensions
         const int WIDTH = 800;
@@ -77,8 +77,9 @@ namespace MatrixTransformations
             y_axis = new AxisY(200);
             z_axis = new AxisZ(200);
 
-            // Initialize the cube
+            // Initialize objects
             cube = new Cube(Color.Purple);
+            piramid = new Piramid(Color.BurlyWood);
 
             // Initialize the timer
             timer = new System.Timers.Timer(50);
@@ -108,6 +109,7 @@ namespace MatrixTransformations
                 ViewTransformation(r, phi, theta, z_axis.vb))));
 
             // Draw cube
+           
             cube.Draw(e.Graphics, 
                 ViewportTransformation(
                 ProjectionTransformation(d,
@@ -115,6 +117,14 @@ namespace MatrixTransformations
                 TranslationTransformation(xTranslation, yTranslation, zTranslation,
                 RotationTransformation(xRotation, yRotation, zRotation,
                 ScaleTransformation(scale, cube.vertexbuffer)))))));
+      
+            piramid.Draw(e.Graphics,
+                ViewportTransformation(
+                ProjectionTransformation(d,
+                ViewTransformation(r, phi, theta,
+                TranslationTransformation(xTranslation, yTranslation, zTranslation,
+                RotationTransformation(xRotation, yRotation, zRotation,
+                ScaleTransformation(scale, piramid.vertexbuffer)))))));
 
             ShowInfo(e.Graphics);
         }

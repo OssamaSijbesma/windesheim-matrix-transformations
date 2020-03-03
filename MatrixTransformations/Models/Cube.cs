@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace MatrixTransformations
 {
-    public class Cube
+    class Cube : Model
     {
 
         //          7----------4
@@ -15,37 +15,33 @@ namespace MatrixTransformations
         //      |/         |/                  z
         //      2----------1
 
-        private const int size = 1;
-        public List<Vector> vertexbuffer = new List<Vector>
+
+        public Cube(Color color) : base(color) 
         {
-            new Vector( 1.0f,  1.0f, 1.0f),     //0
-            new Vector( 1.0f, -1.0f, 1.0f),     //1
-            new Vector(-1.0f, -1.0f, 1.0f),     //2
-            new Vector(-1.0f,  1.0f, 1.0f),     //3
+            vertexbuffer.Add(new Vector(1.0f, 1.0f, 1.0f));     //0
+            vertexbuffer.Add(new Vector(1.0f, -1.0f, 1.0f));     //1
+            vertexbuffer.Add(new Vector(-1.0f, -1.0f, 1.0f));     //2
+            vertexbuffer.Add(new Vector(-1.0f, 1.0f, 1.0f));   //3
 
-            new Vector( 1.0f,  1.0f, -1.0f),    //4
-            new Vector( 1.0f, -1.0f, -1.0f),    //5
-            new Vector(-1.0f, -1.0f, -1.0f),    //6
-            new Vector(-1.0f,  1.0f, -1.0f),    //7
+            vertexbuffer.Add(new Vector(1.0f, 1.0f, -1.0f));    //4
+            vertexbuffer.Add(new Vector(1.0f, -1.0f, -1.0f));    //5
+            vertexbuffer.Add(new Vector(-1.0f, -1.0f, -1.0f));    //6
+            vertexbuffer.Add(new Vector(-1.0f, 1.0f, -1.0f));    //7
 
-            new Vector( 1.2f,  1.2f, 1.2f),     //0
-            new Vector( 1.2f, -1.2f, 1.2f),     //1
-            new Vector(-1.2f, -1.2f, 1.2f),     //2
-            new Vector(-1.2f,  1.2f, 1.2f),     //3
+            vertexbuffer.Add(new Vector(1.2f, 1.2f, 1.2f));     //0
+            vertexbuffer.Add(new Vector(1.2f, -1.2f, 1.2f));     //1
+            vertexbuffer.Add(new Vector(-1.2f, -1.2f, 1.2f));     //2
+            vertexbuffer.Add(new Vector(-1.2f, 1.2f, 1.2f));     //3
 
-            new Vector( 1.2f,  1.2f, -1.2f),    //4
-            new Vector( 1.2f, -1.2f, -1.2f),    //5
-            new Vector(-1.2f, -1.2f, -1.2f),    //6
-            new Vector(-1.2f,  1.2f, -1.2f)     //7
-        };
+            vertexbuffer.Add(new Vector(1.2f, 1.2f, -1.2f));   //4
+            vertexbuffer.Add(new Vector(1.2f, -1.2f, -1.2f));    //5
+            vertexbuffer.Add(new Vector(-1.2f, -1.2f, -1.2f));    //6
+            vertexbuffer.Add(new Vector(-1.2f, 1.2f, -1.2f));     //7
+        }
 
-        Color col;
-
-        public Cube(Color c) { col = c; }
-
-        public void Draw(Graphics g, List<Vector> vb)
+        public override void Draw(Graphics g, List<Vector> vb)
         {
-            Pen pen = new Pen(col, 3f);
+            Pen pen = new Pen(color, 3f);
             g.DrawLine(pen, vb[0].x, vb[0].y, vb[1].x, vb[1].y);    //0 -> 1
             g.DrawLine(pen, vb[1].x, vb[1].y, vb[2].x, vb[2].y);    //1 -> 2
             g.DrawLine(pen, vb[2].x, vb[2].y, vb[3].x, vb[3].y);    //2 -> 3
