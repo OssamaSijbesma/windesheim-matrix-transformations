@@ -42,8 +42,6 @@ namespace MatrixTransformations
         private bool animationToggel = true;
         private int phase = 0;
 
-        private int subphase = 0;
-
         public Form1()
         {
             InitializeComponent();
@@ -100,26 +98,26 @@ namespace MatrixTransformations
                         if (scale > 1.5F || scale < 1F) animationToggel = !animationToggel;
 
                         scale = animationToggel ? scale + 0.01F : scale - 0.01F;
-                        theta -= 0.01F;
+                        theta -= 1F;
                         break;
                     case 2:
                         if (xRotation < 0F) phase = 3;
                         if (xRotation > 45F || xRotation < 0F) animationToggel = !animationToggel;
 
                         xRotation = animationToggel ? xRotation + 1F : xRotation - 1F;
-                        theta -= 0.01F;
+                        theta -= 1F;
                         break;
                     case 3:
                         if (yRotation < 0F) phase = 0;
                         if (yRotation > 45F || yRotation < 0F) animationToggel = !animationToggel;
 
                         yRotation = animationToggel ? yRotation + 1F : yRotation - 1F;
-                        phi += 0.01F;
+                        phi += 1F;
                         break;
                     default:
                         if (phi == -10F && theta == -100F) phase = 1;
-                        if (theta != -100F) theta += 0.01F;
-                        if (phi != -10F) phi -= 0.01F;
+                        if (theta != -100F) theta += 1F;
+                        if (phi != -10F) phi -= 1F;
                         break;
                 }
                 Invalidate();
@@ -260,9 +258,8 @@ namespace MatrixTransformations
                     yTranslation -= 0.1F;
                     break;
                 case Keys.A:
-                    animation = (e.Modifiers == Keys.Shift) ? true : false;       
+                    animation = true;       
                     break;
-
                 case Keys.C:
                     scale = 1F;
                     xTranslation = 0F;
