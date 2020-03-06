@@ -19,24 +19,24 @@ namespace MatrixTransformations
         public Cube(Color color) : base(color) 
         {
             vertexbuffer.Add(new Vector(1.0f, 1.0f, 1.0f));     //0
-            vertexbuffer.Add(new Vector(1.0f, -1.0f, 1.0f));     //1
-            vertexbuffer.Add(new Vector(-1.0f, -1.0f, 1.0f));     //2
-            vertexbuffer.Add(new Vector(-1.0f, 1.0f, 1.0f));   //3
+            vertexbuffer.Add(new Vector(1.0f, -1.0f, 1.0f));    //1
+            vertexbuffer.Add(new Vector(-1.0f, -1.0f, 1.0f));   //2
+            vertexbuffer.Add(new Vector(-1.0f, 1.0f, 1.0f));    //3
 
             vertexbuffer.Add(new Vector(1.0f, 1.0f, -1.0f));    //4
-            vertexbuffer.Add(new Vector(1.0f, -1.0f, -1.0f));    //5
-            vertexbuffer.Add(new Vector(-1.0f, -1.0f, -1.0f));    //6
-            vertexbuffer.Add(new Vector(-1.0f, 1.0f, -1.0f));    //7
+            vertexbuffer.Add(new Vector(1.0f, -1.0f, -1.0f));   //5
+            vertexbuffer.Add(new Vector(-1.0f, -1.0f, -1.0f));  //6
+            vertexbuffer.Add(new Vector(-1.0f, 1.0f, -1.0f));   //7
 
             vertexbuffer.Add(new Vector(1.2f, 1.2f, 1.2f));     //0
-            vertexbuffer.Add(new Vector(1.2f, -1.2f, 1.2f));     //1
-            vertexbuffer.Add(new Vector(-1.2f, -1.2f, 1.2f));     //2
-            vertexbuffer.Add(new Vector(-1.2f, 1.2f, 1.2f));     //3
+            vertexbuffer.Add(new Vector(1.2f, -1.2f, 1.2f));    //1
+            vertexbuffer.Add(new Vector(-1.2f, -1.2f, 1.2f));   //2
+            vertexbuffer.Add(new Vector(-1.2f, 1.2f, 1.2f));    //3
 
-            vertexbuffer.Add(new Vector(1.2f, 1.2f, -1.2f));   //4
-            vertexbuffer.Add(new Vector(1.2f, -1.2f, -1.2f));    //5
-            vertexbuffer.Add(new Vector(-1.2f, -1.2f, -1.2f));    //6
-            vertexbuffer.Add(new Vector(-1.2f, 1.2f, -1.2f));     //7
+            vertexbuffer.Add(new Vector(1.2f, 1.2f, -1.2f));    //4
+            vertexbuffer.Add(new Vector(1.2f, -1.2f, -1.2f));   //5
+            vertexbuffer.Add(new Vector(-1.2f, -1.2f, -1.2f));  //6
+            vertexbuffer.Add(new Vector(-1.2f, 1.2f, -1.2f));   //7
         }
 
         public override void Draw(Graphics g, List<Vector> vb)

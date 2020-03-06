@@ -35,7 +35,13 @@ namespace MatrixTransformations
         private float d = 800F;
         private float phi = -10F; // angle z-axis
         private float theta = -100F; // angle y-axis
-        
+
+        // Matrices
+        private Matrix scaleMatrix;
+        private Matrix rotationMatrix;
+        private Matrix translationMatrix;
+        private Matrix transformationMatrix;
+
         // Animation
         System.Timers.Timer timer;
         private bool animation = false;
@@ -84,7 +90,7 @@ namespace MatrixTransformations
             // Initialize the timer
             timer = new System.Timers.Timer(50);
             timer.AutoReset = true;
-            timer.Elapsed += cubeAnimation;
+            timer.Elapsed += CubeAnimation;
             timer.Start();
         }
 
@@ -108,23 +114,25 @@ namespace MatrixTransformations
                 ProjectionTransformation(d,
                 ViewTransformation(r, phi, theta, z_axis.vb))));
 
+            // Redefine matrices
+            scaleMatrix = Matrix.ScaleMatrix(scale);
+            rotationMatrix = Matrix.RotateMatrixX(xRotation) * Matrix.RotateMatrixY(yRotation) * Matrix.RotateMatrixZ(zRotation);
+            translationMatrix = Matrix.TranslateMatrix(new Vector(xTranslation, yTranslation, zTranslation));
+            transformationMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+
             // Draw cube
-           
             cube.Draw(e.Graphics, 
                 ViewportTransformation(
                 ProjectionTransformation(d,
                 ViewTransformation(r, phi, theta,
-                TranslationTransformation(xTranslation, yTranslation, zTranslation,
-                RotationTransformation(xRotation, yRotation, zRotation,
-                ScaleTransformation(scale, cube.vertexbuffer)))))));
+                Transformation(translationMatrix, cube.vertexbuffer)))));
       
+            // Draw piramid
             piramid.Draw(e.Graphics,
                 ViewportTransformation(
                 ProjectionTransformation(d,
                 ViewTransformation(r, phi, theta,
-                TranslationTransformation(xTranslation, yTranslation, zTranslation,
-                RotationTransformation(xRotation, yRotation, zRotation,
-                ScaleTransformation(scale, piramid.vertexbuffer)))))));
+                Transformation(translationMatrix, piramid.vertexbuffer)))));
 
             ShowInfo(e.Graphics);
         }
@@ -168,35 +176,12 @@ namespace MatrixTransformations
             return result;
         }
 
-        public static List<Vector> ScaleTransformation(float scale, List<Vector> vb)
+        public static List<Vector> Transformation(Matrix transformationMatrix, List<Vector> vb) 
         {
-            Matrix scaleMatrix = Matrix.ScaleMatrix(scale);
-
             List<Vector> result = new List<Vector>();
-            vb.ForEach(v => result.Add(scaleMatrix * v));
+            vb.ForEach(v => result.Add(transformationMatrix * v));
             return result;
         }
-
-        public static List<Vector> RotationTransformation(float xRotation, float yRotation, float zRotation, List<Vector> vb)
-        {
-            Matrix xRotateMatrix = Matrix.RotateMatrixX(xRotation);
-            Matrix yRotateMatrix = Matrix.RotateMatrixY(yRotation);
-            Matrix zRotateMatrix = Matrix.RotateMatrixZ(zRotation);
-
-            List<Vector> result = new List<Vector>();
-            vb.ForEach(v => result.Add(xRotateMatrix * yRotateMatrix * zRotateMatrix * v));
-            return result;
-        }
-
-        public static List<Vector> TranslationTransformation(float xTranslation, float yTranslation, float zTranslation, List<Vector> vb)
-        {
-            Matrix translateMatrix = Matrix.TranslateMatrix(new Vector(xTranslation, yTranslation, zTranslation));
-
-            List<Vector> result = new List<Vector>();
-            vb.ForEach(v => result.Add(translateMatrix * v));
-            return result;
-        }
-
 
         public static List<Vector> ViewTransformation(float r, float phi, float theta, List<Vector> vb)
         {
@@ -214,7 +199,7 @@ namespace MatrixTransformations
             return result;
         }
 
-        private void cubeAnimation(object sender, ElapsedEventArgs e)
+        private void CubeAnimation(object sender, ElapsedEventArgs e)
         {
             if (animation)
             {
