@@ -160,7 +160,6 @@ namespace MatrixTransformations
         }
 
         // Camera matrixes
-
         public static Matrix InverseMatrix(float r, float phi, float theta)
         {
             var radiansPhi = phi * Math.PI / 180;

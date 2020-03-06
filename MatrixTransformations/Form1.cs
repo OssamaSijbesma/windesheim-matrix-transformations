@@ -184,6 +184,7 @@ namespace MatrixTransformations
             float delta_x = WIDTH / 2;
             float delta_y = HEIGHT / 2;
 
+            // Center the model trough matrix calculations
             List<Vector> result = new List<Vector>();
             vb.ForEach(v => result.Add(new Vector(v.x + delta_x, delta_y - v.y)));
             return result;
@@ -191,6 +192,7 @@ namespace MatrixTransformations
 
         public static List<Vector> Transformation(Matrix transformationMatrix, List<Vector> vb) 
         {
+            // Use the scale, rotation and translation matrix to transfrom the vectors
             List<Vector> result = new List<Vector>();
             vb.ForEach(v => result.Add(transformationMatrix * v));
             return result;
@@ -198,15 +200,17 @@ namespace MatrixTransformations
 
         public static List<Vector> ViewTransformation(float r, float phi, float theta, List<Vector> vb)
         {
-            Matrix translateMatrix = Matrix.InverseMatrix(r, phi, theta);
+            Matrix inverseMatrix = Matrix.InverseMatrix(r, phi, theta);
 
+            // Use the inverse matrix to transfrom the vectors
             List<Vector> result = new List<Vector>();
-            vb.ForEach(v => result.Add(translateMatrix * v));                
+            vb.ForEach(v => result.Add(inverseMatrix * v));                
             return result;
         }
 
         public static List<Vector> ProjectionTransformation(float d, List<Vector> vb)
         {
+            // Use the projection matrix to transfrom the vectors
             List<Vector> result = new List<Vector>();
             vb.ForEach(v => result.Add(Matrix.ProjectionMatrix(d, v.z) * v));
             return result;
@@ -214,6 +218,7 @@ namespace MatrixTransformations
 
         private void CubeAnimation(object sender, ElapsedEventArgs e)
         {
+            // An animation which ticks every 50 ms
             if (animation)
             {
                 switch (phase)
