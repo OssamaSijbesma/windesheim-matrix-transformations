@@ -275,7 +275,7 @@ namespace MatrixTransformations
                     yTranslation -= 0.1F;
                     break;
                 case Keys.A:
-                    animation = true;       
+                    animation = true;
                     break;
                 case Keys.C:
                     scale = 1F;
@@ -316,10 +316,10 @@ namespace MatrixTransformations
                 case Keys.Z:
                     zRotation = (e.Modifiers == Keys.Shift) ? zRotation + 1F : zRotation - 1F;
                     break;
-                case Keys.D1:
+                case Keys.D1: case Keys.NumPad1:
                     modelType = 1;
                     break;
-                case Keys.D2:
+                case Keys.D2: case Keys.NumPad2:
                     modelType = 2;
                     break;
             }
