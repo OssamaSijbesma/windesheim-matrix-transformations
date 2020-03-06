@@ -36,6 +36,8 @@ namespace MatrixTransformations
         private float phi = -10F; // angle z-axis
         private float theta = -100F; // angle y-axis
 
+        private int modelType = 0;
+
         // Matrices
         private Matrix scaleMatrix;
         private Matrix rotationMatrix;
@@ -118,21 +120,29 @@ namespace MatrixTransformations
             scaleMatrix = Matrix.ScaleMatrix(scale);
             rotationMatrix = Matrix.RotateMatrixX(xRotation) * Matrix.RotateMatrixY(yRotation) * Matrix.RotateMatrixZ(zRotation);
             translationMatrix = Matrix.TranslateMatrix(new Vector(xTranslation, yTranslation, zTranslation));
+
+            // Combine the matrices
             transformationMatrix = scaleMatrix * rotationMatrix * translationMatrix;
 
-            // Draw cube
-            cube.Draw(e.Graphics, 
-                ViewportTransformation(
-                ProjectionTransformation(d,
-                ViewTransformation(r, phi, theta,
-                Transformation(translationMatrix, cube.vertexbuffer)))));
-      
-            // Draw piramid
-            piramid.Draw(e.Graphics,
-                ViewportTransformation(
-                ProjectionTransformation(d,
-                ViewTransformation(r, phi, theta,
-                Transformation(translationMatrix, piramid.vertexbuffer)))));
+            switch (modelType)
+            {
+                case 2:
+                    // Draw piramid
+                    piramid.Draw(e.Graphics,
+                        ViewportTransformation(
+                        ProjectionTransformation(d,
+                        ViewTransformation(r, phi, theta,
+                        Transformation(transformationMatrix, piramid.vertexbuffer)))));
+                    break;
+                case 1: default:
+                    // Draw cube
+                    cube.Draw(e.Graphics,
+                        ViewportTransformation(
+                        ProjectionTransformation(d,
+                        ViewTransformation(r, phi, theta,
+                        Transformation(transformationMatrix, cube.vertexbuffer)))));
+                    break;
+            }
 
             ShowInfo(e.Graphics);
         }
@@ -161,6 +171,9 @@ namespace MatrixTransformations
             sb.AppendLine($"Theta: \t {string.Format("{0:0.##}", theta)} \t t / T");
             sb.AppendLine();
             sb.AppendLine($"Phase: \t {phase}");
+            sb.AppendLine();
+            sb.AppendLine("Press 1 for a cube");
+            sb.AppendLine("Press 2 for a piramid");
 
             // Draw String
             g.DrawString(sb.ToString(), drawFont, drawBrush, 1,1);
@@ -302,6 +315,12 @@ namespace MatrixTransformations
                     break;
                 case Keys.Z:
                     zRotation = (e.Modifiers == Keys.Shift) ? zRotation + 1F : zRotation - 1F;
+                    break;
+                case Keys.D1:
+                    modelType = 1;
+                    break;
+                case Keys.D2:
+                    modelType = 2;
                     break;
             }
 
